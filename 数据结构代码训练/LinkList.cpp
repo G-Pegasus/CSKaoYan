@@ -8,7 +8,7 @@ typedef struct LNode {
 
 // 初始化
 void initList(LinkList &L) {
-    L = (LNode *)malloc(sizeof(LinkList));
+    L = (LNode *)malloc(sizeof(LNode));
     L->next = NULL;
 }
 
@@ -19,6 +19,7 @@ void printList(LinkList L) {
         printf("%d ", p->data);
         p = p->next;
     }
+    printf("\n");
 }
 
 // 求链表长度
@@ -49,6 +50,21 @@ LinkList headInsert(LinkList &L) {
     }
 
     return L;
+}
+
+// 尾插法建立单链表
+// L[1 2 3 4 5]
+void tailInsert(LinkList &L, int enterData[], int length) {
+    LNode *pTail = L;
+    int i = 0;
+    while (i < length) {
+        LNode *pNode = (LNode *)malloc(sizeof(LNode));
+        pNode->data = enterData[i]; // 给新结点赋值
+        pNode->next = pTail->next; // 新结点的下一个指向尾结点的下一个
+        pTail->next = pNode; // 尾结点的下一个指向新结点
+        pTail = pNode; // 更新尾结点为新插入的结点
+        i++;
+    }
 }
 
 // 按值查找，查找x在L中的位置
@@ -96,35 +112,91 @@ void deleteElem(LinkList &L, int i) {
     free(q);
 }
 
+
+
+
+
+
+// 递归实现：求链表中的最大整数
+int listMax(LinkList p) {
+    if (p == NULL) return -9999;
+    int temp = listMax(p->next);
+    return p->data > temp ? p->data : temp;
+}
+
+// 递归实现：求链表中的结点数
+int listLength(LinkList p) {
+    if (p == NULL) return 0;
+    return listLength(p->next) + 1;
+}
+
+// 递归实现：求链表所有元素的平均值
+double listSum(LinkList p) {
+    if (p == NULL) return 0;
+    return (double)p->data + listSum(p->next);
+}
+
+// 单链表访问第i个数据结点
+int getIthNode(LinkList p, int i) {
+    if (p == NULL) return -1;
+    int cur = 0;
+    i--;
+    LinkList temp = p;
+    while (cur < i) {
+        if (temp->next != NULL) temp = temp->next;
+        else {
+            printf("访问失败！ ");
+            return -1;
+        }
+        cur++;
+    }
+
+    return temp->data;
+}
+
+// 在第i个结点前插入元素
+void insertIth(LinkList &L, int i, int e) {
+    LNode *t1 = getElem(L, i - 1);
+    LNode *t2 = t1->next;
+    LNode *n = (LNode *)malloc(sizeof(LNode));
+    n->data = e;
+    t1->next = n;
+    n->next = t2;
+}
+
+// 查找倒数第m个位置的元素
+int getLastM(LinkList &L, int m) {
+    return 0;
+}
+
+
+
+
 int main() {
     //初始化，头插法建立单链表
-    LinkList L = headInsert(L);
+    int l1[] = {1, 2, 3, 4, 5};
+    LinkList L1;
+    initList(L1);
+    tailInsert(L1, l1, 5);
     cout<<"建立的链表为：";
-    printList(L);
-    cout<<endl;
+    printList(L1);
 
-    //插入：在第二个位置插入结点，数据域为888，并遍历单链表
-    insert(L, 2, 888);
-    cout<<"在第二个位置插入888： ";
-    printList(L);
-    cout<<endl;
+    // 递归求最大值
+    printf("链表的最大值是：%d\n", listMax(L1->next));
 
-    //删除：删除第四个结点
-    deleteElem(L, 4);
-    cout<<"删除第四个结点后：";
-    printList(L);
-    cout<<endl;
+    // 递归求链表结点数
+    int length = listLength(L1->next);
+    printf("链表中的结点数是：%d\n", length);
 
-    //按位查找：查找第三个结点，并输出其数据域的值
-    LNode *p = getElem(L, 3);
-    cout<<"第三个结点的值为："<<p->data<<endl;
+    // 递归求链表所有元素平均值
+    printf("链表元素的平均值为：%.1f\n", listSum(L1->next) / length);
 
-    //按值查找：查找数据域为2的结点的指针
-    LNode *q = locateElem(L, 5);
-    cout<<"数据为5的结点的下一个结点的值为："<<q->next->data<<endl;
-    
-    //输出单链表的长度
-    cout<<"单链表的长度："<<length(L)<<endl;
+    // 访问第i个结点
+    printf("链表中第i个结点为：%d\n", getIthNode(L1->next, 2));
+
+    // 在第i个结点前插入元素
+    insertIth(L1, 2, 6);
+    printList(L1);
 
     return 0;
 }

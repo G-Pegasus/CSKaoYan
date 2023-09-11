@@ -231,9 +231,40 @@ void except(SqList &La, SqList &Lb) {
     int indexA = 0, indexB = 0;
     while (indexA < La.length && indexB < Lb.length) {
         if (La.data[indexA] == Lb.data[indexB]) {
-            
+            indexA++;
+            indexB++;
+        } else if (La.data[indexA] > Lb.data[indexB]) {
+            indexB++;
+        } else {
+            La.data[cur] = La.data[indexA];
+            indexA++;
+            cur++;
         }
     }
+    La.length = cur;
+}
+
+
+// 将顺序表逆置
+// L[1 2 3 4 5]
+void reverse(SqList &L, int begin, int end) {
+    int low = begin, high = end;
+    while (low < high) {
+        int temp = L.data[low];
+        L.data[low] = L.data[high];
+        L.data[high] = temp;
+        low++; high--;
+    }
+}
+
+
+// 将顺序表循环左移r个位置
+// L[1 2 3 4 5] -> L[3 4 5 1 2]
+void moveR(SqList &L, int r) {
+    int end = L.length - 1;
+    reverse(L, 0, end);
+    reverse(L, 0, end - r);
+    reverse(L, L.length - r, end);
 }
 
 
@@ -298,6 +329,20 @@ int main() {
     commonAB(L5, L6);
     printf("求两个升序表的交集：");
     printList(L5);
+
+    // La[1 3 4 7]   Lb[1 2 4 9]
+    SqList L7;
+    initList(L7);
+    listInsert(L7, 0, 1); listInsert(L7, 1, 3); listInsert(L7, 2, 4); listInsert(L7, 3, 7);
+    except(L7, L6);
+    printf("求两个升序表的差集：");
+    printList(L7);
+
+    // L7[3 7 9 10 13]
+    listInsert(L7, 2, 9); listInsert(L7, 3, 10); listInsert(L7, 4, 13);
+    moveR(L7, 2);
+    printf("将顺序表循环左移2个位置");
+    printList(L7);
 
     return 0;
 }
