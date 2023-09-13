@@ -22,6 +22,14 @@ void printList(LinkList L) {
     printf("\n");
 }
 
+void printList2(LinkList L) {
+    while(L) {
+        printf("%d ", L->data);
+        L = L->next;
+    }
+    printf("\n");
+}
+
 // 求链表长度
 int length(LinkList L) {
     LNode *p = L->next;
@@ -88,6 +96,8 @@ LNode *getElem(LinkList L, int i) {
 
     return p;
 }
+
+
 
 // 将x插入到链表的第i个位置上
 void insert(LinkList &L, int i, int x) {
@@ -165,8 +175,89 @@ void insertIth(LinkList &L, int i, int e) {
 }
 
 // 查找倒数第m个位置的元素
-int getLastM(LinkList &L, int m) {
-    return 0;
+// L[1 6 2 3 4 5]
+int getLastM(LinkList L, int m) {
+    LNode *fore = L;
+    int count = 1;
+    while (count != m) {
+        count++;
+        fore = fore->next;
+    }
+
+    LNode *last = L;
+    while (fore->next != NULL) {
+        fore = fore->next;
+        last = last->next;
+    }
+
+    return last->data;
+}
+
+
+// 按位查找，查找在单链表中第i个位置的结点
+LNode *getElem2(LinkList L, int i) {
+
+    if (i < 0) return NULL;
+    if (i == 0) return L;
+    
+    for (int j = 1; j < i; j++) L = L->next;
+
+    return L;
+}
+
+// 从La中删除第j个元素开始的共len个元素
+// 并将这len个元素插入到表Lb中第j个元素前
+// La[1 6 2 3 4 5]  Lb[2 5 7 9 10] (j = 3, len = 2)
+void operateLinkList(LinkList &La, LinkList &Lb, int j, int len) {
+    LNode *La2 = getElem2(La, j + len); // 找到要删除结点的下一个结点
+    LNode *La1 = getElem2(La, j - 1); // 找到要删除结点的上一个结点
+    
+    LNode *LaDel = La1->next; // 取到要删除的链的第一个结点
+    
+    int count = len - 1;  // 移动到要删除的链中最后一个元素，所需的计数
+    LNode *LaInsert = LaDel;
+    while (count > 0) {
+        count--;
+        LaInsert = LaInsert->next; 
+    }
+    LaInsert->next = NULL; // 找到要删除链的最后一个结点，并把其后面的结点置空。此时，LaDel就是要删除的链
+
+    LNode *LbNew = getElem2(Lb, j - 1); // 找到Lb中第 j-1 个元素，要在这个结点的后面插入LaDel
+    LaInsert->next = LbNew->next;
+    LbNew->next = LaDel;
+
+    La1->next = La2; // 删除La中的链
+}
+
+// 从非递减有序的单链表中删除值相同的多余元素
+// L[1 2 2 3 5 5]
+void delSimilar(LinkList &L) {
+    LNode *temp = L->next;
+    while (temp && temp->next) {
+        if (temp->next->data == temp->data) {
+            temp->next = temp->next->next;
+        } else {
+            temp = temp->next;
+        }
+    }
+}
+
+// 求一个链表中比x小的元素数量
+// L[1 2 2 3 5 5] (x = 4)
+int lessThanXCnt(LinkList L, int x) {
+    int cnt = 0;
+    LNode *temp = L->next;
+    
+    int num = -999;
+    while (temp->next) {
+        if (temp->data < x && temp->data != num) {
+            cnt++;
+            num = temp->data;
+        }
+        temp = temp->next;
+    }
+    
+    return cnt;
 }
 
 
@@ -197,6 +288,34 @@ int main() {
     // 在第i个结点前插入元素
     insertIth(L1, 2, 6);
     printList(L1);
+
+    // 查找链表中倒数第m个结点
+    printf("链表中倒数第m个结点为：%d\n", getLastM(L1, 3));
+
+    // 从La中删除第j个元素开始的共len个元素
+    // 并将这len个元素插入到表Lb中第j个元素前
+    // La[1 6 2 3 4 5]  Lb[2 5 7 9 10] (j = 3, len = 2)
+    int l2[] = {2, 5, 7, 9, 10};
+    LinkList L2;
+    initList(L2);
+    tailInsert(L2, l2, 5);
+    operateLinkList(L1->next, L2->next, 3, 2);
+    printList(L1);
+    printList(L2);
+
+    
+    int l3[] = {1, 2, 2, 3, 5, 5};
+    LinkList L3;
+    initList(L3);
+    tailInsert(L3, l3, 6);
+
+    // 求一个链表中比x小的元素数量
+    printf("链表中比x小的元素数量为：%d\n", lessThanXCnt(L3, 4));
+
+    // 从非递减有序的单链表中删除值相同的多余元素
+    delSimilar(L3);
+    printf("删除链表中相同的多余元素：");
+    printList(L3);
 
     return 0;
 }
