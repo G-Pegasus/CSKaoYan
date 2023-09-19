@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/**",
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/ssp/**",
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward/**",
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/**",
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../include/**",
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed/**",
+                "E:/BaiduNetdiskDownload/mingw64/include/**",
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/tr1/**",
+                "E:/BaiduNetdiskDownload/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "E:/BaiduNetdiskDownload/mingw64/bin/gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
